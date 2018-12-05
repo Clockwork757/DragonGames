@@ -1,21 +1,27 @@
+mixin login(user={loggedIn: false})
+    if !user.loggedIn
+        input(type='button', value='Login', onclick="goTo('/view/login')", class='l-button', id='login-button')
+    else
+        p(id='login-button') Logged In as #{user.username}
+
 html
+    block head
+        title Dragon Games
+        block scripts
+            script(src="/socket.io/socket.io.js")
+            script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js")
+            script(src="/js/index.js")
+        block styles
+            link(rel='stylesheet', href='/styles/styles.css', type='text/css')
 
-block head
-    title Dragon Games
-    block scripts
-        script(src="/socket.io/socket.io.js")
-        script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js")
-        script(src="/js/index.js")
-    link(rel='stylesheet', href='/styles/styles.css', type='text/css')
-
-body
-    header
+    body
+        block header
+            center
+                h1 DragonGames
+                +login(user)
         center
-            h1 DragonGames
-            input(type='button', value='Login', onclick="location.href='/view/login'", class='l-button', id='login-button')
-    center
-        block content
+            block content
 
-block foot
-      #footer
-        p some footer content
+    block foot
+          #footer
+            p some footer content

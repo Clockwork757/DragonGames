@@ -23,6 +23,10 @@ function getPage(page) {
     get('/view/', page, setContent, "text");
 }
 
+function goTo(page) {
+    location.href = page;
+}
+
 /*
 window.onload = function () {
     getPage('home');

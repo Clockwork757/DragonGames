@@ -53,6 +53,10 @@ class _DB extends EventEmitter {
         }
         );
     }
+
+    addAccount(username:string, password:string){
+        
+    }
 }
 
-export var DB = new _DB();
+export const DB = new _DB();

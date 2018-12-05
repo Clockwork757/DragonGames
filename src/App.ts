@@ -13,6 +13,8 @@ var app = express(),
     socket = io.listen(server);
 
 app.set('views', './static/');
+
+// Serve js and css files for html to access
 app.use(express.static('/static/js'));
 app.use(express.static('/static/styles'));
 
@@ -31,10 +33,12 @@ app.use(bodyParser.json());
 app.use(express.static(root));
 
 app.get('/', (req, res) => {
-    //res.redirect('/view/home');
-    res.render('home.pug')
+    res.redirect('/view/home');
+    //res.render('home.pug')
     //res.sendFile('index.html', dirops);
 });
+
+const gen_user = { loggedIn: false, username: "Default User" }
 
 app.get('/view/:page', (req, res) => {
     var page = req.params.page;
@@ -42,9 +46,20 @@ app.get('/view/:page', (req, res) => {
         res.write('Last page: ' + req.session!.lastPage + '. ');
     }
     req.session!.lastPage = '/view/' + page
-    res.render(page)
-    //res.sendFile("./views/" + page + ".html", dirops);
+    var user;
+    if (req.session!.user){
+        user = req.session!.user;
+    }else{
+        user = gen_user;
+    }
+    res.render(page, { user: user})
 });
+
+app.post('/users/new-account', (req, res) => {
+    var username = req.body.username,
+        password = req.body.password;
+
+})
 
 var port = process.env.PORT || 8080;
 
