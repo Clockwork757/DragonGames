@@ -1,0 +1,19 @@
+extends templates/layout
+block content
+    center
+        h2(style='color: #000000;') Please provide your details to create an account
+        p
+            b First Name: 
+            input#name(type='text')
+        p
+            b Last Name: 
+            input#lastname(type='text')
+        p
+            b Username: 
+            input#userr(type='text')
+        p
+            b Password: 
+            input#passs(type='text')
+        br
+        input(type='button', value='Create Account', onclick='createAccount()')
+    

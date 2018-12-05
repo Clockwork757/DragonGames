@@ -1,0 +1,17 @@
+extends templates/layout
+block content
+  h2(style='color: #000000;') Please Login to Store Your Game Progress
+  p Username: 
+  input#user(type='text')
+  br
+  p Password: 
+  input#pass(type='text')
+  br
+  input(type='button', value='Login', onclick='login()')
+  br
+  br
+  p
+    | New User? Sign up 
+    a(href='/view/signup') Here
+  br
+  br

@@ -1,35 +1,65 @@
-abstract class Game {
+export abstract class Game {
+    constructor() {
 
+    }
 }
 
-export abstract class BoardGame extends Game{
+export abstract class BoardGame extends Game {
     board: Board;
-
-    constructor(n: number) {
+    validPieces: Array<Piece>;
+    constructor(n: number, validPieces?: Array<Piece>) {
         super();
+        this.validPieces = validPieces || new Array<Piece>();
         this.board = new Board(n);
     }
 
-    toString(){
+    parseMove(j: JSON){
+        
+    }
+
+    place(p: Piece, x: number, y: number) {
+        if (!this.validPieces.includes(p)) {
+            return
+        }
+        if (this.getTile(x, y).isEmpty()) {
+            this.setTile(p, x, y);
+        }
+    }
+
+    toString() {
         return this.board.toString();
     }
+
+    getTile(x: number, y: number) {
+        return this.board.getTile(x, y);
+    }
+
+    setTile(p: Piece, x: number, y: number) {
+        this.board.setTile(p, x, y);
+    }
 }
 
-abstract class Piece{
+export abstract class Piece {
     type: String;
+    isNothing: Boolean = false;
 
-    constructor(t: String){
+    constructor(t: String) {
         this.type = t
     }
-}
 
-class _Nothing extends Piece{
-    constructor(){
-        super("Nothing");
+    toString() {
+        return this.type;
     }
 }
 
-var Nothing = new _Nothing();
+class _Nothing extends Piece {
+    constructor() {
+        super("[]");
+        this.isNothing = true;
+    }
+}
+
+export var Nothing = new _Nothing();
 
 class Board {
     tiles: Tile[][] = new Array<Array<Tile>>();
@@ -48,19 +78,34 @@ class Board {
         let n: number = this.tiles.length;
         for (let i: number = 0; i < n; i++) {
             for (let j: number = 0; j < n; j++) {
-                s += this.tiles[i][j];
+                s += this.getTile(i, j).toString() + ":\t";
             }
+            s += '\n';
         }
         return s;
+    }
+
+    getTile(x: number, y: number) {
+        return this.tiles[x][y]
+    }
+
+    setTile(p: Piece, x: number, y: number) {
+        this.tiles[x][y].setPiece(p);
     }
 }
 
 class Tile {
-    piece:Piece;
-    constructor(p?: Piece){
+    piece: Piece;
+    constructor(p?: Piece) {
         this.piece = p || Nothing;
     }
     toString() {
-        return this.piece;
+        return this.piece.toString();
+    }
+    setPiece(p: Piece) {
+        this.piece = p;
+    }
+    isEmpty() {
+        return this.piece.isNothing;
     }
 }

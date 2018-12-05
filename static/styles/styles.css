@@ -1,0 +1,22 @@
+body {
+    background-color: #D1C4E9;
+    padding: 16px;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    width: 100%
+}
+
+.l-button {
+    border-radius: 10px;
+    width: 100px;
+    height: 30px;
+}
+
+#login-button {
+    position: fixed;
+    left: 90%;
+    top: 2%;
+}

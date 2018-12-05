@@ -1,0 +1,21 @@
+html
+
+block head
+    title Dragon Games
+    block scripts
+        script(src="/socket.io/socket.io.js")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js")
+        script(src="/js/index.js")
+    link(rel='stylesheet', href='/styles/styles.css', type='text/css')
+
+body
+    header
+        center
+            h1 DragonGames
+            input(type='button', value='Login', onclick="location.href='/view/login'", class='l-button', id='login-button')
+    center
+        block content
+
+block foot
+      #footer
+        p some footer content
