@@ -20,3 +20,7 @@ header {
     left: 85%;
     top: 2%;
 }
+
+#error{
+    color: red;
+}

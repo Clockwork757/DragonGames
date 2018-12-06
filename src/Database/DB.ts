@@ -37,25 +37,52 @@ class _DB extends EventEmitter {
         super();
     }
 
-    login(username: string, password: string) {
-        var q = `SELECT username FROM users WHERE username = $1::text AND hpassword = $2::text`;
+    login(username: string) {
+        var q = `SELECT hpassword, avatar FROM users WHERE username = $1::text`;
         var self = this;
-        con.query(q, [username, password], (err: Error, res: QueryResult) => {
+        con.query(q, [username], (err: Error, res: QueryResult) => {
             if (err) {
                 console.log(err);
             }
             else {
-                if (res.rowCount > 0)
-                    self.emit('loggedin:' + username, true);
+                if (res.rowCount == 1)
+                    self.emit('login:' + username, { hpassword: res.rows[0]['hpassword'], avatar: res.rows[0]['avatar'] });
                 else
-                    self.emit('loggedin:' + username, false);
+                    self.emit('login:' + username, {});
             }
         }
         );
     }
 
-    addAccount(username:string, password:string){
-        
+    signup(username: string, password: string) {
+        var q = `INSERT INTO users(username, hpassword) VALUES($1::text, $2::text)`;
+        var self = this;
+        con.query(q, [username, password], (err: Error, res: QueryResult) => {
+            if (err) {
+                console.log(err);
+                self.emit('signup:' + username, false);
+            }
+            else {
+                self.emit('signup:' + username, true);
+            }
+        })
+    }
+
+    getUserInfo(username: string) {
+        var q = `SELECT avatar,username FROM users WHERE username = $1::text`;
+        var self = this;
+        con.query(q, [username], (err: Error, res: QueryResult) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                if (res.rowCount == 1)
+                    self.emit('userInfo:' + username, { avatar: res.rows[0]['avatar'], username: res.rows[0]['username']});
+                else
+                    self.emit('userInfo:' + username, {});
+            }
+        }
+        );
     }
 }
 

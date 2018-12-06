@@ -3,6 +3,8 @@ mixin login(user={loggedIn: false})
         input(type='button', value='Login', onclick="goTo('/view/login')", class='l-button', id='login-button')
     else
         p(id='login-button') Logged In as #{user.username}
+            br
+            a(href='/logout') Log out
 
 html
     block head
@@ -21,6 +23,8 @@ html
                 +login(user)
         center
             block content
+            block error
+                div#error
 
     block foot
           #footer

@@ -1,11 +1,15 @@
 extends templates/layout
+
+block append scripts
+    script(src="/js/login.js")
+
 block content
-  h2(style='color: #000000;') Please Login to Store Your Game Progress
+  h2 Please Login to Store Your Game Progress
   p Username: 
-  input#user(type='text')
+  input#username(type='text')
   br
   p Password: 
-  input#pass(type='text')
+  input#password(type='text')
   br
   input(type='button', value='Login', onclick='login()')
   br
