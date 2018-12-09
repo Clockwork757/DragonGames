@@ -20,7 +20,8 @@ html
         block header
             center
                 h1 DragonGames
-                +login(user)
+                block login
+                    +login(user)
         center
             block content
             block error

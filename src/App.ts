@@ -78,6 +78,9 @@ app.post('/signup', (req, res) => {
     var username = req.body.username,
         password = req.body.password;
     var lastPage = req.session!.lastPage || "/";
+    if (['/view/login', '/view/signup'].includes(lastPage)) {
+        lastPage = '/'
+    }
     DB.once('signup:' + username, (msg) => {
         console.log(msg);
         if (msg) {
@@ -104,7 +107,7 @@ app.post('/login', (req, res) => {
     var username = req.body.username,
         password = req.body.password;
     var lastPage = req.session!.lastPage || "/";
-    if (['/view/login'].includes(lastPage)) {
+    if (['/view/login', '/view/signup'].includes(lastPage)) {
         lastPage = '/'
     }
     DB.once('login:' + username, (msg) => {
@@ -134,6 +137,7 @@ app.post('/login', (req, res) => {
 
 app.get('/view/games/lobby', (req, res) => {
     var user: any;
+    console.log(!req.session!.user)
     if (!req.session!.user) {
         res.redirect('/view/login');
         return;
@@ -145,7 +149,7 @@ app.get('/view/games/lobby', (req, res) => {
         if (msg) {
             res.render('games/lobby', { challengeInfo: msg, user: user });
         } else {
-            res.redirect('/view/login');
+            res.render('games/lobby', { user: user });
         }
     });
     DB.getChalllenges(username);
