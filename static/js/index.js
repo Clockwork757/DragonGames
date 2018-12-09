@@ -44,11 +44,11 @@ function getPage(page) {
 
 function goTo(page) {
     if (page) {
-        console.log("going to: " + page)
-        location.href = page;
+        window.location = page;
     }
 }
 
 function logout() {
-    get('/logout', )
+    get('/logout')
+    goTo('/')
 }
