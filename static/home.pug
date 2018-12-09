@@ -3,15 +3,14 @@ extends templates/layout
 block content
     if user.loggedIn
       a(href='/view/games/lobby') Challenges
-    h2(style='color: #000000;') Pick a Game To Play
-    p or Continue to play
+    h2(style='color: #000000;') Then Pick a Game To Play
     br
-    a(href='rps.html')
+    a(href='/view/games/rps.pug')
       img(src='https://cdn-images-1.medium.com/max/1600/0*CtoUAxqGUbzzzc9W.png', style='width:210px;height:150px;')
-    a(href='ttt.html')
+    a(href='/view/games/tictactoe.pug')
       img(src='https://upload.wikimedia.org/wikipedia/commons/3/32/Tic_tac_toe.svg', style='width:210px;height:150px;')
     br
-    a(href='chess.html')
+    a(href='/views/games/chess.pug')
       img(src='https://upload.wikimedia.org/wikipedia/commons/6/6f/ChessSet.jpg', style='width:210px;height:150px;')
-    a(href='checkers.html')
+    a(href='/views/games/checkers.pug')
       img(src='https://upload.wikimedia.org/wikipedia/commons/b/b6/Draughts.svg', style='width:210px;height:150px;')
