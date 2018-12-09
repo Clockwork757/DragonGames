@@ -1,29 +1,6 @@
 import { EventEmitter } from "events";
 import { Pool, QueryResult } from "pg";
 
-function autoEscape(target: Function) {
-    for (const propertyName of Object.keys(target.prototype)) {
-        const descriptor = Object.getOwnPropertyDescriptor(target.prototype, propertyName);
-        if (descriptor == null) {
-            continue;
-        }
-        const isMethod = descriptor.value instanceof Function;
-        if (!isMethod)
-            continue;
-
-        const originalMethod = descriptor.value;
-        descriptor.value = function (...args: any[]) {
-            var escaped_args: string[] = [];
-            args.forEach(arg => {
-                escaped_args.push(escape(arg));
-            });
-            return originalMethod(...escaped_args);
-        };
-
-        Object.defineProperty(target.prototype, propertyName, descriptor);
-    }
-}
-
 const con: Pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: true,
@@ -31,7 +8,6 @@ const con: Pool = new Pool({
 
 con.connect();
 
-@autoEscape
 class _DB extends EventEmitter {
     constructor() {
         super();
@@ -45,10 +21,12 @@ class _DB extends EventEmitter {
                 console.log(err);
             }
             else {
-                if (res.rowCount == 1)
+                if (res.rowCount == 1) {
                     self.emit('login:' + username, { hpassword: res.rows[0]['hpassword'], avatar: res.rows[0]['avatar'] });
-                else
-                    self.emit('login:' + username, {});
+                }
+                else {
+                    self.emit('login:' + username, false);
+                }
             }
         }
         );
@@ -77,13 +55,53 @@ class _DB extends EventEmitter {
             }
             else {
                 if (res.rowCount == 1)
-                    self.emit('userInfo:' + username, { avatar: res.rows[0]['avatar'], username: res.rows[0]['username']});
+                    self.emit('userInfo:' + username, { avatar: res.rows[0]['avatar'], username: res.rows[0]['username'] });
                 else
                     self.emit('userInfo:' + username, {});
             }
         }
         );
     }
+
+    getChalllenges(username: string) {
+        var q = `SELECT id, username, gtype from challenges WHERE opponent = $1::text`
+        var self = this;
+        con.query(q, [username], (err: Error, res: QueryResult) => {
+            if (err) {
+                console.log(err);
+                self.emit('getChalllenges:' + username, false);
+            }
+            else {
+                if (res.rowCount > 0) {
+                    var r = new Array();
+                    res.rows.forEach(row => {
+                        r.push({ opponent: row['username'], gtype: row['gtype'], id: row['id'] });
+                    });
+                    self.emit('getChalllenges:' + username, r);
+                }
+                else {
+                    self.emit('getChalllenges:' + username, false);
+                }
+            }
+        }
+        );
+    }
+
+    challenge(username: string, opponent: string, game: string) {
+        var q = `INSERT INTO challenges (username, opponent, gType) VALUES ($1::text, $2::text, $3::text)`
+        var self = this;
+        con.query(q, [username, opponent, game], (err: Error, res: QueryResult) => {
+            if (err) {
+                console.log(err);
+                self.emit('challenge:' + username + opponent, false);
+            } else {
+                self.emit('challenge:' + username + opponent, true);
+            }
+        }
+        );
+    }
+
+
 }
 
 export const DB = new _DB();

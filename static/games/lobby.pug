@@ -1,0 +1,19 @@
+extends ../templates/layout
+
+block content
+    h3 Challenge Someone:
+    block challenges
+        h3 Challenges:
+            form
+                
+        table
+            tr
+                td Opponent
+                td Game
+            each val in challengeInfo
+                tr
+                    td
+                        a(href=`/view/user/${val['opponent']}`)= val['opponent']
+                    td= val['gtype']
+                    td
+                        input(value='Accept', type='button', onclick=`#Accept(${val['id']})`)

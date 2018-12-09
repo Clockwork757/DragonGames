@@ -1,6 +1,8 @@
 extends templates/layout
 
 block content
+    if user.loggedIn
+      a(href='/view/games/lobby') Challenges
     h2(style='color: #000000;') Pick a Game To Play
     p or Continue to play
     br

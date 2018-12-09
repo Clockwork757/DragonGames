@@ -6,7 +6,6 @@ import session from 'express-session';
 import path from 'path';
 import { TicTacToe } from './Games/TicTacToe';
 import { DB } from './Database/DB';
-import { assertSpreadProperty } from 'babel-types';
 import { hash, compare } from 'bcrypt';
 
 var app = express(),
@@ -41,7 +40,7 @@ app.get('/', (req, res) => {
     //res.sendFile('index.html', dirops);
 });
 
-const gen_user = { loggedIn: false, username: "Default User" }
+const gen_user = { loggedIn: false }
 
 app.get('/view/:page', (req, res) => {
     var page = req.params.page;
@@ -57,6 +56,12 @@ app.get('/view/:page', (req, res) => {
 });
 
 app.get('/view/user/:username', (req, res) => {
+    var user: any;
+    if (req.session!.user) {
+        user = req.session!.user;
+    } else {
+        user = gen_user;
+    }
     var username = req.params.username;
     var avatar = 'default.jpg';
     DB.once('userInfo:' + username, (msg) => {
@@ -64,7 +69,7 @@ app.get('/view/user/:username', (req, res) => {
             avatar = msg['avatar'];
             username = msg['username'];
         }
-        res.render('profile', { user: { username: username, avatar: avatar} });
+        res.render('profile', { username: username, avatar: avatar, user: user });
     })
     DB.getUserInfo(username);
 })
@@ -99,15 +104,18 @@ app.post('/login', (req, res) => {
     var username = req.body.username,
         password = req.body.password;
     var lastPage = req.session!.lastPage || "/";
+    if (['/view/login'].includes(lastPage)) {
+        lastPage = '/'
+    }
     DB.once('login:' + username, (msg) => {
         if (msg) {
-            console.log("logged in: " + username + " id: " + msg + " redirecting to " + lastPage);
             compare(password, msg['hpassword'], (err, correct) => {
                 if (err) {
                     console.log(err);
                     return
                 }
                 if (correct) {
+                    console.log("logged in: " + username + " redirecting to " + lastPage);
                     req.session!.user = { username: username, loggedIn: true, avatar: msg['avatar'] };
                     res.send({ redir: '/', status: 0 });
                 } else {
@@ -123,6 +131,41 @@ app.post('/login', (req, res) => {
     });
     DB.login(username);
 });
+
+app.get('/view/games/lobby', (req, res) => {
+    var user: any;
+    if (!req.session!.user) {
+        res.redirect('/view/login');
+        return;
+    } else {
+        user = req.session!.user;
+    }
+    const username = req.session!.user['username'];
+    DB.once('getChalllenges:' + username, (msg) => {
+        if (msg) {
+            res.render('games/lobby', { challengeInfo: msg, user: user });
+        } else {
+            res.redirect('/view/login');
+        }
+    });
+    DB.getChalllenges(username);
+})
+
+app.post('/sendChallenge', (req, res) => {
+
+})
+
+app.get('/games/chess', (req, res) => {
+
+})
+
+app.get('/games/TTT', (req, res) => {
+
+})
+
+app.get('/games/RPS', (req, res) => {
+
+})
 
 app.get('/logout', (req, res) => {
     const username = req.session!.user['username'];

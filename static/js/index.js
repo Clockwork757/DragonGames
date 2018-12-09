@@ -1,4 +1,4 @@
-var socket = io();
+//var socket = io();
 
 function setContent(s) {
     $("#content").html(s)
