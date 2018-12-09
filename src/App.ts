@@ -149,7 +149,7 @@ app.get('/view/games/lobby', (req, res) => {
         if (msg) {
             res.render('games/lobby', { challengeInfo: msg, user: user });
         } else {
-            res.render('games/lobby', { user: user });
+            res.render('games/lobby', { user: user, challengeInfo: {} });
         }
     });
     DB.getChalllenges(username);
