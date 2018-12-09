@@ -4,21 +4,24 @@ block append scripts
     script(src="/js/login.js")
 
 block content
-  h2 Please Login to Store Your Game Progress
-  p Username: 
-  input#username(type='text')
-  br
-  p Password: 
-  input#password(type='text')
-  br
-  input(type='button', value='Login', onclick='login()')
-  br
-  br
-  p
-    | New User? Sign up 
-    a(onclick='goTo("/view/singup"') Here
-  br
-  br
+    center.container
+        h2(style='color: #000000;') Please Login to Store Your Game Progress
+        form
+            b Username: 
+            input#username(type='text')
+            br
+            b Password: 
+            input#password(type='password')
+            br
+            br
+            br
+            input(type='button', value='Login', onclick='login()')
+            br
+            br
+            p New User?
+            a(href="/view/signup") Sign up here
+            br
+        br
 
 
 block login

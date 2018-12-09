@@ -163,11 +163,15 @@ app.get('/games/chess', (req, res) => {
 
 })
 
-app.get('/games/TTT', (req, res) => {
+app.get('/games/checkers', (req, res) => {
 
 })
 
-app.get('/games/RPS', (req, res) => {
+app.get('/games/tictactoe', (req, res) => {
+
+})
+
+app.get('/games/rps', (req, res) => {
 
 })
 
