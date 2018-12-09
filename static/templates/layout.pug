@@ -8,13 +8,15 @@ mixin login(user={loggedIn: false})
 
 html
     block head
-        title Dragon Games
+        title DragonGames
         block scripts
             script(src="/socket.io/socket.io.js")
             script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js")
+            script(src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js")
             script(src="/js/index.js")
         block styles
             link(rel='stylesheet', href='/styles/styles.css', type='text/css')
+            link(type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css")
 
     body
         block header
@@ -28,4 +30,4 @@ html
 
     block foot
           #footer
-            p some footer content
+            p CS 275 - Section 001 - Professor Matthew Burlick
