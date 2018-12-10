@@ -28,29 +28,24 @@ block content
         b Game:
         select(id='game')
             option(value=" ", selected="selected") -- Please choose a game --
-            option(value="tictactoe") TicTacToe
-            option(value="chess") Chess
+            option(value="Tic Tac Toe") TicTacToe
+            option(value="Chess") Chess
         br
         br
         input(type='button', value='Challenge', onclick='challenge()')
 
-    block challenges
-        h3 Challenges:
-        table
-            tr
-                td Opponent
-                td Game
-                td
-            each val in challengeInfo
-                if user.username == val['opponent']
-                    +challengeRow(val)
     block sentChallenges
         h3 Sent Challenges:
         table
             tr
-                td Opponent
-                td Game
-                td
             each val in challengeInfo
                 if user.username == val['username']
                     +sentChallengeRow(val)
+
+    block challenges
+        h3 Recieved Challenges:
+        table
+            tr
+            each val in challengeInfo
+                if user.username == val['opponent']
+                    +challengeRow(val)
