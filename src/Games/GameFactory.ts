@@ -7,5 +7,6 @@ export function gameControllerFactory(game: string, username: string, opponent: 
     } else if (['Chess', 'chess'].includes(game)) {
         return new ChessController(username, opponent, socket);
     }
+    console.log("Really shouldn't get here")
     return new TicTacToeController('no', 'no', socket);
 }

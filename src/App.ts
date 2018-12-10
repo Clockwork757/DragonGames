@@ -1,17 +1,16 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import io from 'socket.io';
+import socketio, { Socket } from 'socket.io';
 import session from 'express-session';
 import { DB } from './Database/DB';
 import { hash, compare } from 'bcrypt';
-import { TicTacToe } from './Games/TicTacToe'
-import { TicTacToeController, GameController } from './Games/GameController'
+import { GameController } from './Games/GameController'
 import { gameControllerFactory } from './Games/GameFactory'
 
 var app = express(),
     http = require('http'),
     server = http.createServer(app),
-    socket = io.listen(server);
+    io = socketio.listen(server);
 
 app.set('views', './static/');
 
@@ -97,7 +96,7 @@ app.post('/signup', (req, res) => {
         } else {
             DB.signup(username, hash);
         }
-    });;
+    });
 })
 
 app.post('/login', (req, res) => {
@@ -117,7 +116,7 @@ app.post('/login', (req, res) => {
                 if (correct) {
                     console.log("logged in: " + username + " redirecting to " + lastPage);
                     req.session!.user = { username: username, loggedIn: true, avatar: msg['avatar'] };
-                    res.send({ redir: '/', status: 0 });
+                    res.send({ redir: '/', status: 0, user: req.session!.user });
                 } else {
                     res.send({ redir: '', status: 2, error: "Incorrect Password" });
                 }
@@ -175,7 +174,6 @@ var games = new Map<string, GameController>();
 
 app.get('/games/:opponent-:game', (req, res) => {
     var user: any;
-    console.log(!req.session!.user)
     if (!req.session!.user) {
         res.redirect('/view/login');
         return;
@@ -197,7 +195,7 @@ app.get('/games/:opponent-:game', (req, res) => {
     var p2s = `${opponent}:${username}:${game}`
     var gc: GameController;
     if ((games.get(p1s) == undefined) || (games.get(p2s) == undefined)) {
-        gc = gameControllerFactory(game, username, opponent, socket);
+        gc = gameControllerFactory(game, username, opponent, io);
         games.set(p1s, gc);
         games.set(p2s, gc);
     } else {
@@ -205,7 +203,39 @@ app.get('/games/:opponent-:game', (req, res) => {
         games.set(p2s, gc);
     }
 
-    res.render('games/tictactoe', { user: user });
+    res.render(`games/${game}`, { user: user });
+})
+
+io.on('connection', (socket: Socket) => {
+    var gc: GameController;
+    // Routes room joins to to their correct GameController
+    socket.on('join', (msg) => {
+        gc = games.get(msg['gamestring'])!;
+        socket.join(gc.room, () => {
+            gc.sendState();
+            socket.in(gc.room).on('move', (move) => {
+                console.log(`got move from: ${move['player']}`)
+                gc.parseMove(move);
+            })
+        });
+    })
+});
+
+app.get('/games/leave/:opponent-:game', (req, res) => {
+    var user: any;
+    if (!req.session!.user) {
+        res.redirect('/view/login');
+        return;
+    } else {
+        user = req.session!.user;
+    }
+    var username = req.session!.user.username,
+        opponent = req.params.opponent,
+        game = req.params.game
+    var p1s = `${username}:${opponent}:${game}`
+    var p2s = `${opponent}:${username}:${game}`
+    games.delete(p1s);
+    games.delete(p2s);
 })
 
 app.get('/logout', (req, res) => {

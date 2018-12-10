@@ -9,10 +9,10 @@ mixin login(user={loggedIn: false})
 html
     block head
         title DragonGames
-        block scripts
+        block libs
             script(src="/socket.io/socket.io.js")
             script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
-            //script(src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js")
+        block scripts
             script(src="/js/index.js")
         block styles
             //link(type="text/css" rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css")

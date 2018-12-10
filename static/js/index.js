@@ -1,5 +1,3 @@
-//var socket = io();
-
 function setContent(s) {
     $("#content").html(s)
 }
@@ -49,5 +47,6 @@ function goTo(page) {
 
 function logout() {
     get('/logout')
+    localStorage.setItem("username", '');
     goTo('/')
 }

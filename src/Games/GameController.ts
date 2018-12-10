@@ -4,10 +4,11 @@ import { DB } from '../Database/DB';
 import { TicTacToe } from './TicTacToe';
 import { Chess } from './Chess';
 
-
 enum Turn {
     Player1, Player2
 }
+
+var sockets = new Map<string, io.Server>();
 
 export abstract class GameController {
     game: Game;
@@ -21,23 +22,10 @@ export abstract class GameController {
         this.game = game;
         this.p1 = player1;
         this.p2 = player2;
+        var pstring = `${player1}:${player2}:${game}`;
         this.io = io;
+        sockets.set(pstring, this.io);
         this.room = `${game.name}:${player1}:${player2}`
-        let self = this;
-        io.on('connection', (socket: Socket) => {
-            socket.on('join', (msg) => {
-                socket.on('move', (move) => {
-                    console.log(`got move from: ${move['player']}`)
-                    this.parseMove(move);
-                })
-                socket.join(this.room, (err: Error) => {
-                    this.sendState();
-                    if (err) {
-                        console.log(err);
-                    }
-                });
-            })
-        });
     }
 
     abstract parseMove(j: any): void
