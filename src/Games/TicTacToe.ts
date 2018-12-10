@@ -31,8 +31,6 @@ class _X extends Piece {
     }
 }
 
-
-
 class _O extends Piece {
     constructor() {
         super("O");

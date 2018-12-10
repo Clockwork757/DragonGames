@@ -49,7 +49,7 @@ export abstract class Piece {
 
     constructor(t: string) {
         this.type = t;
-        this.image = `/img/${t}.png`;
+        this.image = `/imgs/${t}.png`;
     }
 
     toString() {
@@ -96,7 +96,8 @@ class Board {
         for (let i: number = 0; i < n; i++) {
             h += "<tr>"
             for (let j: number = 0; j < n; j++) {
-                h += `<td>${this.getTile(i, j).toString()}</td>`;
+                var image = `<img src="${this.getTile(i, j).piece.image}" style=width:195px;height:195px;>`;
+                h += `<td>${image}</td>`;
             }
             h += "</tr>\n"
         }
