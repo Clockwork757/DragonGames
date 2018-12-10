@@ -2,6 +2,7 @@ function challenge() {
     setError('')
     var opponent = $('#opponent').val(),
         game = $('#game').val();
+    console.log(opponent, game)
     post('/challenge', {
         opponent: opponent,
         game: game
