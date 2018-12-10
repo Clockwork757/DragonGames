@@ -154,7 +154,7 @@ app.post('/challenge', (req, res) => {
     var username = req.session!.user.username,
         opponent = req.body.opponent,
         game = req.body.game;
-    if(!username){
+    if (!username) {
         res.redirect('/view/login');
     }
     if (username == opponent) {
