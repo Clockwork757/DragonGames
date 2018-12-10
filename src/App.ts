@@ -148,25 +148,38 @@ app.get('/games/lobby', (req, res) => {
         if (msg) {
             res.render('games/lobby', { challengeInfo: msg, user: user });
         } else {
-            res.render('games/lobby', { user: user });
+            res.render('games/lobby', { user: user, challengeInfo: {} });
         }
     });
-    DB.getChalllenges(username);
+    DB.getChallenges(username);
 })
 
-app.post('/sendChallenge', (req, res) => {
+app.post('/challenge', (req, res) => {
+    var username = req.session!.user.username,
+        opponent = req.body.opponent,
+        game = req.body.game;
+    DB.once('challenge:' + username + opponent + game, (msg) => {
+        if (msg) {
+            res.redirect('/view/games/lobby');
+        }
+    })
 
+    DB.challenge(username, opponent, game);
 })
 
 app.get('/games/chess', (req, res) => {
 
 })
 
-app.get('/games/TTT', (req, res) => {
+app.get('/games/checkers', (req, res) => {
 
 })
 
-app.get('/games/RPS', (req, res) => {
+app.get('/games/tictactoe', (req, res) => {
+
+})
+
+app.get('/games/rps', (req, res) => {
 
 })
 

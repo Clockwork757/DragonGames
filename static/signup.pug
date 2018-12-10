@@ -2,14 +2,17 @@ extends templates/layout
 block append scripts
     script(src="/js/signup.js")
 block content
-    center
-        h2(style='color: #000000;') Please provide your details to create an account
+    center.container
+        h2(style='color: #000000;') Please pick a username and password
         form
-            b Username: 
+            b Username:      
             input#username(type='text')
             br
             br
-            b Password: 
-            input#password(type='text')
+            b Password:      
+            input#password(type='password')
+            br
+            b Re-enter Password:  
+            input#password2(type='password')
         br
         input(type='button', value='Create Account', onclick='signup()')

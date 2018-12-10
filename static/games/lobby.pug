@@ -1,7 +1,25 @@
 extends ../templates/layout
 
+block append scripts
+    script(src="/js/lobby.js")
+
 block content
-    h3 Challenge Someone:
+    center.container
+        h3 Challenge Someone:   
+        b Opponent Username:   
+        input#opponent(type="text")
+        br
+        b Game:   
+        select(id='game')
+            option(value=" ") -- Please choose a game --
+            option(value="rps") Rock, Paper, Sissors
+            option(value="tictactoe") TicTacToe
+            option(value="checkers") Checkers
+            option(value="chess") Chess
+        br
+        br
+        input(type='button', value='Challenge', onclick='challenge()')
+
     block challenges
         h3 Challenges:
             form

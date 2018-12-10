@@ -1,10 +1,16 @@
 function signup() {
+    setError('')
     var username = $('#username').val(),
-        password = $('#password').val();
-    post('/signup', {
-        username: username,
-        password: password
-    }, handleSignup)
+        password = $('#password').val(),
+        password2 = $('#password2').val();
+    if (password == password2) {
+        post('/signup', {
+            username: username,
+            password: password
+        }, handleSignup)
+    } else {
+        setError('Password entres do not match')
+    }
 }
 
 function handleSignup(msg) {

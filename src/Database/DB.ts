@@ -63,7 +63,7 @@ class _DB extends EventEmitter {
         );
     }
 
-    getChalllenges(username: string) {
+    getChallenges(username: string) {
         var q = `SELECT id, username, gtype from challenges WHERE opponent = $1::text`
         var self = this;
         con.query(q, [username], (err: Error, res: QueryResult) => {
@@ -93,9 +93,9 @@ class _DB extends EventEmitter {
         con.query(q, [username, opponent, game], (err: Error, res: QueryResult) => {
             if (err) {
                 console.log(err);
-                self.emit('challenge:' + username + opponent, false);
+                self.emit('challenge:' + username + opponent + game, false);
             } else {
-                self.emit('challenge:' + username + opponent, true);
+                self.emit('challenge:' + username + opponent + game, true);
             }
         }
         );
