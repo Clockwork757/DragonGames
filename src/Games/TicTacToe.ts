@@ -6,29 +6,36 @@ export class TicTacToe extends BoardGame {
     }
 
     placeX(x: number, y: number) {
+        console.log(`X: ${x},${y}: ${this.getTile(x, y)}, ${this.getTile(x, y).isEmpty}`)
         if (this.getTile(x, y).isEmpty) {
             this.place(X, x, y)
+            return true;
         }
+        return false;
     }
 
     placeO(x: number, y: number) {
+        console.log(`O: ${x},${y}: ${this.getTile(x, y)}, ${this.getTile(x, y).isEmpty}`)
         if (this.getTile(x, y).isEmpty) {
             this.place(O, x, y)
+            return true;
         }
+        return false;
     }
 
     parseMove(j: any) {
         switch (j['piece']) {
-            case 'X': this.placeX(j['x'], j['y']); break;
-            case 'O': this.placeO(j['x'], j['y']); break;
+            case 'X': return this.placeX(j['x'], j['y']);
+            case 'O': return this.placeO(j['x'], j['y']);
         }
+        return false;
     }
 
     render() {
         return this.board.toHTML('TicTacToe');
     }
 
-    checkEnd() {
+    get state() {
         var e = EndState.inProgress;
 
         return e;

@@ -76,3 +76,12 @@ table.TicTacToe tr td:last-child.TicTacToe-tile {
 table td.Chess-tile {
     border: 5px solid black;
 }
+
+h2.turn-notif{
+    color: crimson;
+    display: inline;
+}
+
+h3#versus{
+    display: inline;
+}

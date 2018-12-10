@@ -141,7 +141,6 @@ app.get('/games/lobby', (req, res) => {
     }
     const username = req.session!.user['username'];
     DB.once('getChalllenges:' + username, (msg) => {
-        console.log(msg);
         if (msg) {
             res.render('games/lobby', { challengeInfo: msg, user: user });
         } else {
@@ -155,6 +154,9 @@ app.post('/challenge', (req, res) => {
     var username = req.session!.user.username,
         opponent = req.body.opponent,
         game = req.body.game;
+    if(!username){
+        res.redirect('/view/login');
+    }
     if (username == opponent) {
         res.render('no', {
             no: "You can't challenge yourself"
@@ -163,7 +165,8 @@ app.post('/challenge', (req, res) => {
     }
     DB.once('challenge:' + username + opponent + game, (msg) => {
         if (msg) {
-            res.redirect('/games/lobby');
+            console.log(msg);
+            res.send({ redir: '/games/lobby', status: 0 });
         }
     })
 
@@ -195,15 +198,13 @@ app.get('/games/:opponent-:game', (req, res) => {
     var p1s = `${username}:${opponent}:${game}`
     var p2s = `${opponent}:${username}:${game}`
     var gc: GameController;
-    if ((games.get(p1s) == undefined) || (games.get(p2s) == undefined)) {
+    if ((games.get(p1s) == undefined)) {
         gc = gameControllerFactory(game, username, opponent, io);
         games.set(p1s, gc);
         games.set(p2s, gc);
     } else {
-        gc = games.get(p1s)!;
-        games.set(p2s, gc);
+        gc = games.get(p1s)! || games.get(p2s)!;
     }
-
     res.render(`games/${game}`, { user: user });
 })
 
@@ -211,11 +212,13 @@ io.on('connection', (socket: Socket) => {
     var gc: GameController;
     // Routes room joins to to their correct GameController
     socket.on('join', (msg) => {
-        gc = games.get(msg['gamestring'])!;
+        console.log(msg['gamestring']);
+        var gs1 = msg['gamestring'].split(',')[0],
+            gs2 = msg['gamestring'].split(',')[1];
+        gc = games.get(gs1) || games.get(gs2)!;
         socket.join(gc.room, () => {
             gc.sendState();
             socket.in(gc.room).on('move', (move) => {
-                console.log(`got move from: ${move['player']}`)
                 gc.parseMove(move);
             })
         });
