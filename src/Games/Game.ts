@@ -99,12 +99,12 @@ class Board {
     }
 
     toHTML(game: string) {
-        let h = `<table id='${game}' class='board'>`
+        let h = `<table class='board ${game}'>`
         let n: number = this.tiles.length;
         for (let i: number = 0; i < n; i++) {
             h += "<tr>"
             for (let j: number = 0; j < n; j++) {
-                var image = `<img data-x=${j} data-y=${i} class="board-tile-image ${game}-tile-image" src="${this.getTile(i, j).piece.image}" style=width:195px;height:195px;>`;
+                var image = `<img data-x=${j} data-y=${i} class="board-tile-image ${game}-tile-image" src="${this.getTile(i, j).piece.image}">`;
                 h += `<td data-x=${j} data-y=${i} class="board-tile">${image}</td>`;
             }
             h += "</tr>\n"
