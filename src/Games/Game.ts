@@ -20,10 +20,7 @@ export abstract class BoardGame extends Game {
     }
 
     place(p: Piece, x: number, y: number) {
-        if (!this.validPieces.includes(p)) {
-            return
-        }
-        if (this.getTile(x, y).isEmpty()) {
+        if (this.validPieces.includes(p)) {
             this.setTile(p, x, y);
         }
     }
@@ -40,6 +37,9 @@ export abstract class BoardGame extends Game {
         this.board.setTile(p, x, y);
     }
 
+    render() {
+        return this.board.toHTML(this.name);
+    }
 }
 
 export abstract class Piece {
@@ -91,7 +91,7 @@ class Board {
     }
 
     toHTML(game: string) {
-        let h = `<td id='${game}'>`
+        let h = `<table id='${game}'>`
         let n: number = this.tiles.length;
         for (let i: number = 0; i < n; i++) {
             h += "<tr>"
@@ -100,7 +100,7 @@ class Board {
             }
             h += "</tr>\n"
         }
-        return h
+        return h + "</table>"
     }
 
     getTile(x: number, y: number) {

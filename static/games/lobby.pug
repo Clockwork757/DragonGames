@@ -5,13 +5,13 @@ block append scripts
 
 block content
     center.container
-        h3 Challenge Someone:   
-        b Opponent Username:   
+        h3 Challenge Someone:
+        b Opponent Username:
         input#opponent(type="text")
         br
-        b Game:   
+        b Game:
         select(id='game')
-            option(value=" ") -- Please choose a game --
+            option(value=" ", selected="selected") -- Please choose a game --
             option(value="rps") Rock, Paper, Sissors
             option(value="tictactoe") TicTacToe
             option(value="checkers") Checkers
@@ -23,7 +23,7 @@ block content
     block challenges
         h3 Challenges:
             form
-                
+
         table
             tr
                 td Opponent

@@ -14,13 +14,13 @@ export class TicTacToe extends BoardGame {
     }
 
     parseMove(j: any) {
-        switch(j['piece']){
-            case 'X': this.placeX(j['x'], j['y'])
-            case 'O': this.placeO(j['x'], j['y'])
+        switch (j['piece']) {
+            case 'X': this.placeX(j['x'], j['y']); break;
+            case 'O': this.placeO(j['x'], j['y']); break;
         }
     }
 
-    render(){
+    render() {
         return this.board.toHTML('TicTacToe');
     }
 }

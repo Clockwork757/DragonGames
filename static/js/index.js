@@ -29,7 +29,7 @@ function post(route, data, action = console.log, dataType = 'text') {
         dataType: dataType,
         data: data,
         success: (msg, x, y) => {
-            action(JSON.parse(msg));
+            action(msg);
         },
         error: (jgXHR, textStatus, errorThrown) => {
             console.log("Error: " + textStatus + " " + errorThrown);

@@ -5,7 +5,8 @@ import session from 'express-session';
 import { DB } from './Database/DB';
 import { hash, compare } from 'bcrypt';
 import { TicTacToe } from './Games/TicTacToe'
-import { TicTacToeController as GameController } from './Games/GameController'
+import { TicTacToeController, GameController } from './Games/GameController'
+import { gameGetter } from './Games/GameGetter'
 
 var app = express(),
     http = require('http'),
@@ -136,7 +137,6 @@ app.post('/login', (req, res) => {
 
 app.get('/games/lobby', (req, res) => {
     var user: any;
-    console.log(!req.session!.user)
     if (!req.session!.user) {
         res.redirect('/view/login');
         return;
@@ -160,7 +160,7 @@ app.post('/challenge', (req, res) => {
         game = req.body.game;
     DB.once('challenge:' + username + opponent + game, (msg) => {
         if (msg) {
-            res.redirect('/view/games/lobby');
+            res.redirect('/games/lobby');
         }
     })
 
@@ -183,13 +183,36 @@ app.get('/games/rps', (req, res) => {
 
 })
 
-app.get('/test', (req, res) => {
-    var gc = new GameController(new TicTacToe(), 'test10', 'test11', socket);
-    gc.parseMove({ player: 'test10', x: 0, y: 0 })
-    gc.parseMove({ player: 'test11', x: 0, y: 1 })
-    //console.log(gc.game.render())
-    //console.log(gc.game)
-    res.render('games/TicTacToe', { board: gc.game.render() });
+// Store GameControllers in a dictionary to access if coming back to page or reloading
+var games = new Map<string, GameController>();
+
+app.get('/games/:opponent-:game', (req, res) => {
+    var user: any;
+    console.log(!req.session!.user)
+    if (!req.session!.user) {
+        res.redirect('/view/login');
+        return;
+    } else {
+        user = req.session!.user;
+    }
+    var username = req.session!.user.username,
+        opponent = req.params.opponent,
+        game = gameGetter(req.params.game);
+    var p1s = `${username}:${opponent}:${game.name}`
+    var p2s = `${opponent}:${username}:${game.name}`
+    var gc: GameController;
+    if ((games.get(p1s) == undefined) || (games.get(p2s) == undefined)) {
+        gc = new TicTacToeController(game, username, opponent, socket);
+        games.set(p1s, gc);
+        games.set(p2s, gc);
+    } else {
+        gc = games.get(p1s)!;
+    }
+
+    games.set(p1s, gc);
+    games.set(p2s, gc);
+
+    res.render('games/tictactoe', { user: user });
 })
 /*
 socket.on('connection', (socket: Socket) => {
@@ -213,7 +236,7 @@ app.get('/logout', (req, res) => {
 app.get('/whoami', (req, res) => {
     if (req.session!.user) {
         res.send(req.session!.user);
-    }else{
+    } else {
         res.send(false)
     }
 })

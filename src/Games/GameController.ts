@@ -3,8 +3,7 @@ import { Game } from './Game'
 import { EventEmitter } from 'events';
 import { DB } from '../Database/DB';
 
-//test
-abstract class GameController extends EventEmitter {
+export abstract class GameController extends EventEmitter {
     game: Game;
     p1: string;
     p2: string;
@@ -21,19 +20,16 @@ abstract class GameController extends EventEmitter {
         let self = this;
         io.on('connection', (socket: Socket) => {
             socket.on('join', (msg) => {
-                console.log("joining room")
-                console.log(this.room)
+                socket.on('move', (move) => {
+                    console.log(`got move from: ${move['player']}`)
+                    this.parseMove(move);
+                })
                 socket.join(this.room, (err: Error) => {
+                    this.sendState();
                     if (err) {
                         console.log(err);
                     }
                 });
-                io.in(this.room).emit('m', 'all');
-                socket.to(this.room).emit("m", "in room");
-            })
-            socket.on('move', (move) => {
-                console.log(`got move for game with p1: ${self.p1} p2: ${self.p2}`)
-                this.parseMove(move);
             })
         });
     }
@@ -41,7 +37,8 @@ abstract class GameController extends EventEmitter {
     abstract parseMove(j: any): void
 
     sendState() {
-        this.io.to('this.room').emit(this.game.render());
+        console.log('sending game state to client');
+        this.io.in(this.room).emit('state', this.game.render());
     }
 }
 
@@ -51,11 +48,13 @@ export class TicTacToeController extends GameController {
     }
 
     parseMove(j: any) {
+        //console.log(j['player'] == this.p1, this.p1);
         if (j['player'] == this.p1) {
             j['piece'] = 'X'
         } else {
             j['piece'] = 'O'
         }
+        console.log(j);
         this.game.parseMove(j);
         this.sendState();
     }

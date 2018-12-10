@@ -1,4 +1,8 @@
 extends layout
 
+block append scripts
+    script(src="/js/games/game.js")
+
 block content
-    block game
+    div#board
+    input(type='button', value='send', onclick='sendMove(1,2)')

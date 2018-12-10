@@ -88,7 +88,7 @@ class _DB extends EventEmitter {
     }
 
     challenge(username: string, opponent: string, game: string) {
-        var q = `INSERT INTO challenges (username, opponent, gType) VALUES ($1::text, $2::text, $3::text)`
+        var q = `INSERT INTO challenges (username, opponent, gType) VALUES ($1::text, $2::text, $3::gametype)`
         var self = this;
         con.query(q, [username, opponent, game], (err: Error, res: QueryResult) => {
             if (err) {
@@ -101,10 +101,6 @@ class _DB extends EventEmitter {
         );
     }
 
-
-    createGame(player1: string, player2: string, game: string) {
-        var q1 = `INSERT INTO savedGames (p1, p2, gtype, )`
-    }
 
 }
 
