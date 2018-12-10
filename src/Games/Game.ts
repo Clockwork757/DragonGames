@@ -1,3 +1,5 @@
+import { TicTacToe } from "./TicTacToe";
+
 export abstract class Game {
 
     name: string;
@@ -91,13 +93,13 @@ class Board {
     }
 
     toHTML(game: string) {
-        let h = `<table id='${game}' class='board'>`
+        let h = `<table class='board ${game}'>`
         let n: number = this.tiles.length;
         for (let i: number = 0; i < n; i++) {
             h += "<tr>"
             for (let j: number = 0; j < n; j++) {
                 var image = `<img src="${this.getTile(i, j).piece.image}" style=width:195px;height:195px;>`;
-                h += `<td class="board-tile">${image}</td>`;
+                h += `<td class="board-tile ${game}-tile">${image}</td>`;
             }
             h += "</tr>\n"
         }

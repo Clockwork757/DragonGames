@@ -39,12 +39,26 @@ table.board {
     border-collapse: collapse;
 } table td.board-tile {
     border: 5px solid black; 
-} table tr:first-child td {
+} table.TicTacToe tr:first-child td.TicTacToe-tile {
     border-top: 0;
-} table tr td:first-child {
+} table.TicTacToe tr td:first-child.TicTacToe-tile {
     border-left: 0;
-} table tr:last-child td {
+} table.TicTacToe tr:last-child td.TicTacToe-tile {
     border-bottom: 0;
-} table tr td:last-child {
+} table.TicTacToe tr td:last-child.TicTacToe-tile {
     border-right: 0;
+}
+
+table.Chess {
+    border-collapse: collapse
+} table td.Chess-tile {
+    border: 5px solid black; 
+} table tr:first-child td {
+    border-top: 1;
+} table tr td:first-child {
+    border-left: 1;
+} table tr:last-child td {
+    border-bottom: 1;
+} table tr td:last-child {
+    border-right: 1;
 }
