@@ -102,6 +102,10 @@ class _DB extends EventEmitter {
     }
 
 
+    createGame(player1: string, player2: string, game: string) {
+        var q1 = `INSERT INTO savedGames (p1, p2, gtype, )`
+    }
+
 }
 
 export const DB = new _DB();

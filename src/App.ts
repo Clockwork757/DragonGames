@@ -1,12 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import io from 'socket.io';
-import fs from 'fs';
+import io, { Socket } from 'socket.io';
 import session from 'express-session';
-import path from 'path';
-import { TicTacToe } from './Games/TicTacToe';
 import { DB } from './Database/DB';
 import { hash, compare } from 'bcrypt';
+import { TicTacToe } from './Games/TicTacToe'
+import { TicTacToeController as GameController } from './Games/GameController'
 
 var app = express(),
     http = require('http'),
@@ -135,7 +134,7 @@ app.post('/login', (req, res) => {
     DB.login(username);
 });
 
-app.get('/view/games/lobby', (req, res) => {
+app.get('/games/lobby', (req, res) => {
     var user: any;
     console.log(!req.session!.user)
     if (!req.session!.user) {
@@ -171,23 +170,41 @@ app.get('/games/RPS', (req, res) => {
 
 })
 
+app.get('/test', (req, res) => {
+    var gc = new GameController(new TicTacToe(), 'test10', 'test11', socket);
+    gc.parseMove({ player: 'test10', x: 0, y: 0 })
+    gc.parseMove({ player: 'test11', x: 0, y: 1 })
+    //console.log(gc.game.render())
+    //console.log(gc.game)
+    res.render('games/TicTacToe', { board: gc.game.render() });
+})
+/*
+socket.on('connection', (socket: Socket) => {
+    console.log("got con");
+})*/
+
 app.get('/logout', (req, res) => {
-    const username = req.session!.user['username'];
-    req.session!.destroy((err) => {
-        if (err) {
-            console.log("Session delete error: " + err);
-        } else {
-            console.log("logged out: " + username);
-        }
-    });
+    if (req.session!.user) {
+        const username = req.session!.user['username'];
+        req.session!.destroy((err) => {
+            if (err) {
+                console.log("Session delete error: " + err);
+            } else {
+                console.log("logged out: " + username);
+            }
+        });
+    }
     res.redirect('/');
 })
 
-socket.on('connect', function (socket) {
-    socket.on('ugh', function (msg) {
-        console.log('message: ' + msg);
-    });
-});
+app.get('/whoami', (req, res) => {
+    if (req.session!.user) {
+        res.send(req.session!.user);
+    }else{
+        res.send(false)
+    }
+})
+
 
 var port = process.env.PORT || 8080;
 

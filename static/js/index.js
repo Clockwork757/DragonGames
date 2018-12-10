@@ -14,7 +14,6 @@ function get(route, action = console.log, dataType = 'text') {
         url: route,
         dataType: dataType,
         success: (msg) => {
-            window.history.pushState("", "", route);
             action(msg)
         },
         error: (jgXHR, textStatus, errorThrown) => {

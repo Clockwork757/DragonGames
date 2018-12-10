@@ -1,8 +1,16 @@
 import { Game } from './Game'
 
-class RockPaperScissors extends Game{
+class RockPaperScissors extends Game {
 
-    constructor(){
-        super();
+    constructor() {
+        super('RockPaperScissors');
+    }
+
+    render() {
+        return ""
+    }
+
+    parseMove(j: any) {
+
     }
 }

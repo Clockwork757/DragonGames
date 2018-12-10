@@ -1,20 +1,22 @@
 export abstract class Game {
-    constructor() {
 
+    name: string;
+
+    constructor(name: string) {
+        this.name = name;
     }
+
+    abstract render(): string
+    abstract parseMove(j: any): void
 }
 
 export abstract class BoardGame extends Game {
     board: Board;
     validPieces: Array<Piece>;
-    constructor(n: number, validPieces?: Array<Piece>) {
-        super();
+    constructor(name: string, n: number, validPieces?: Array<Piece>) {
+        super(name);
         this.validPieces = validPieces || new Array<Piece>();
         this.board = new Board(n);
-    }
-
-    parseMove(j: JSON){
-        
     }
 
     place(p: Piece, x: number, y: number) {
@@ -37,14 +39,17 @@ export abstract class BoardGame extends Game {
     setTile(p: Piece, x: number, y: number) {
         this.board.setTile(p, x, y);
     }
+
 }
 
 export abstract class Piece {
-    type: String;
+    type: string;
+    image: string;
     isNothing: Boolean = false;
 
-    constructor(t: String) {
-        this.type = t
+    constructor(t: string) {
+        this.type = t;
+        this.image = `/img/${t}.png`;
     }
 
     toString() {
@@ -54,7 +59,7 @@ export abstract class Piece {
 
 class _Nothing extends Piece {
     constructor() {
-        super("[]");
+        super("Nothing");
         this.isNothing = true;
     }
 }
@@ -83,6 +88,19 @@ class Board {
             s += '\n';
         }
         return s;
+    }
+
+    toHTML(game: string) {
+        let h = `<td id='${game}'>`
+        let n: number = this.tiles.length;
+        for (let i: number = 0; i < n; i++) {
+            h += "<tr>"
+            for (let j: number = 0; j < n; j++) {
+                h += `<td>${this.getTile(i, j).toString()}</td>`;
+            }
+            h += "</tr>\n"
+        }
+        return h
     }
 
     getTile(x: number, y: number) {
