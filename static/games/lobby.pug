@@ -6,10 +6,11 @@ block append scripts
 mixin challengeRow(val)
     tr
         td
-            a(href=`/view/user/${val['opponent']}`)= val['username']
+            a(href=`/view/user/${val['username']}`)= val['username']
         td= val['gtype']
         td
-            input(value='Accept', type='button', onclick=`goTo('/games/${val['username']}-${val['gtype']}')`)
+            input(value='Accept', type='button', class='challenge-button', data-opponent=val['username'], data-game=val['gtype']) 
+            //onclick=`goTo('/games/${val['username']}-${val['gtype']}')`)
 
 mixin sentChallengeRow(val)
     tr
@@ -17,7 +18,8 @@ mixin sentChallengeRow(val)
             a(href=`/view/user/${val['opponent']}`)= val['opponent']
         td= val['gtype']
         td
-            input(value='Go', type='button', onclick=`goTo('/games/${val['opponent']}-${val['gtype']}')`)
+            input(value='Accept', type='button', class='challenge-button', data-opponent=val['opponent'], data-game=val['gtype'])
+            //onclick=`goTo('/games/${val['opponent']}-${val['gtype']}')`)
 
 block content
     center.container

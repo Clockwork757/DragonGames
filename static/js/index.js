@@ -47,6 +47,6 @@ function goTo(page) {
 
 function logout() {
     get('/logout')
-    localStorage.setItem("username", '');
+    localStorage.removeItem("username");
     goTo('/')
 }

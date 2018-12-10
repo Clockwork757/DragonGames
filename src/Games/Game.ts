@@ -1,8 +1,8 @@
 export enum EndState {
-    Player1,
-    Player2,
-    Tie,
-    inProgress
+    Player1 = 'p1',
+    Player2 = 'p2',
+    Tie = 'tie',
+    inProgress = 'prog'
 }
 
 export abstract class Game {
@@ -14,8 +14,8 @@ export abstract class Game {
     }
 
     abstract render(): string
-    abstract parseMove(j: any): void
-    abstract checkEnd(): EndState
+    abstract parseMove(j: any): boolean
+    abstract get state(): EndState
 }
 
 export abstract class BoardGame extends Game {
@@ -132,7 +132,7 @@ class Tile {
     setPiece(p: Piece) {
         this.piece = p;
     }
-    isEmpty() {
+    get isEmpty() {
         return this.piece.isNothing;
     }
 }

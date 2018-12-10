@@ -28,10 +28,10 @@ export class Chess extends BoardGame {
     }
 
     parseMove(j: any) {
-
+        return false;
     }
 
-    checkEnd() {
+    get state() {
         var e = EndState.inProgress;
 
         return e;
