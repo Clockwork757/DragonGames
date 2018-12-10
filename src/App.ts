@@ -158,6 +158,12 @@ app.post('/challenge', (req, res) => {
     var username = req.session!.user.username,
         opponent = req.body.opponent,
         game = req.body.game;
+    if (username == opponent) {
+        res.render('no', {
+            no: "You can't challenge yourself"
+        })
+        return;
+    }
     DB.once('challenge:' + username + opponent + game, (msg) => {
         if (msg) {
             res.redirect('/games/lobby');
@@ -168,10 +174,6 @@ app.post('/challenge', (req, res) => {
 })
 
 app.get('/games/chess', (req, res) => {
-
-})
-
-app.get('/games/checkers', (req, res) => {
 
 })
 
@@ -198,6 +200,10 @@ app.get('/games/:opponent-:game', (req, res) => {
     var username = req.session!.user.username,
         opponent = req.params.opponent,
         game = gameGetter(req.params.game);
+    if (username == opponent) {
+        res.render('no', { no: "Don't play with yourself" })
+        return;
+    }
     var p1s = `${username}:${opponent}:${game.name}`
     var p2s = `${opponent}:${username}:${game.name}`
     var gc: GameController;
