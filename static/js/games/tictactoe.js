@@ -8,7 +8,13 @@ function sendMove(x, y) {
 
 socket.open();
 
-$(".board-tile").on(() => {
+$(".TicTacToe-tile-image").on(() => {
     console.log("clicked")
     console.log($this.data('x'))
 })
+
+$(document).on("click", ".TicTacToe-tile-image", function (event) {
+    var x = $(event.target).data('x'),
+        y = $(event.target).data('y');
+    sendMove(x,y);
+});

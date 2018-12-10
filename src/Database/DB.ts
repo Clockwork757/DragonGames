@@ -64,7 +64,7 @@ class _DB extends EventEmitter {
     }
 
     getChallenges(username: string) {
-        var q = `SELECT id, username, gtype from challenges WHERE opponent = $1::text`
+        var q = `SELECT id, username, opponent, gtype from challenges WHERE opponent = $1::text OR username = $1::text`
         var self = this;
         con.query(q, [username], (err: Error, res: QueryResult) => {
             if (err) {
@@ -75,7 +75,7 @@ class _DB extends EventEmitter {
                 if (res.rowCount > 0) {
                     var r = new Array();
                     res.rows.forEach(row => {
-                        r.push({ opponent: row['username'], gtype: row['gtype'], id: row['id'] });
+                        r.push({ opponent: row['opponent'], username: row['username'], gtype: row['gtype'], id: row['id'] });
                     });
                     self.emit('getChalllenges:' + username, r);
                 }

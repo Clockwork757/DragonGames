@@ -3,6 +3,22 @@ extends ../templates/layout
 block append scripts
     script(src="/js/lobby.js")
 
+mixin challengeRow(val)
+    tr
+        td
+            a(href=`/view/user/${val['opponent']}`)= val['username']
+        td= val['gtype']
+        td
+            input(value='Accept', type='button', onclick=`goTo('/games/${val['username']}-${val['gtype']}')`)
+
+mixin sentChallengeRow(val)
+    tr
+        td
+            a(href=`/view/user/${val['opponent']}`)= val['opponent']
+        td= val['gtype']
+        td
+            input(value='Go', type='button', onclick=`goTo('/games/${val['opponent']}-${val['gtype']}')`)
+
 block content
     center.container
         h3 Challenge Someone:
@@ -20,17 +36,21 @@ block content
 
     block challenges
         h3 Challenges:
-            form
-
         table
             tr
                 td Opponent
                 td Game
                 td
             each val in challengeInfo
-                tr
-                    td
-                        a(href=`/view/user/${val['opponent']}`)= val['opponent']
-                    td= val['gtype']
-                    td
-                        input(value='Accept', type='button', onclick=`goTo('/games/${val['opponent']}-${val['gtype']}')`)
+                if user.username == val['opponent']
+                    +challengeRow(val)
+    block sentChallenges
+        h3 Sent Challenges:
+        table
+            tr
+                td Opponent
+                td Game
+                td
+            each val in challengeInfo
+                if user.username == val['username']
+                    +sentChallengeRow(val)

@@ -6,7 +6,6 @@ var socket = io(options = {
 var username, opponent, game;
 
 var username = localStorage.getItem('username');
-console.log(username)
 
 function getOpponentAndGame(){
     var url = window.location.href.split('/'),
@@ -33,11 +32,5 @@ socket.on('state', (state) => {
     setBoard(state['boardState']);
 })
 
+// Server has a map of gamestrings to gamecontrollers, both 
 socket.emit('join', {gamestring: `${username}:${opponent}:${game}`})
-
-/*
-$(window).bind('beforeunload', function () {
-    console.log('closing connection');
-    //get('/games')
-    $(window).unbind(this);
-});*/

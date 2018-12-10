@@ -6,11 +6,15 @@ export class TicTacToe extends BoardGame {
     }
 
     placeX(x: number, y: number) {
-        this.place(X, x, y)
+        if (this.getTile(x, y).isEmpty) {
+            this.place(X, x, y)
+        }
     }
 
     placeO(x: number, y: number) {
-        this.place(O, x, y)
+        if (this.getTile(x, y).isEmpty) {
+            this.place(O, x, y)
+        }
     }
 
     parseMove(j: any) {
@@ -24,7 +28,7 @@ export class TicTacToe extends BoardGame {
         return this.board.toHTML('TicTacToe');
     }
 
-    checkEnd(){
+    checkEnd() {
         var e = EndState.inProgress;
 
         return e;

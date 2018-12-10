@@ -141,6 +141,7 @@ app.get('/games/lobby', (req, res) => {
     }
     const username = req.session!.user['username'];
     DB.once('getChalllenges:' + username, (msg) => {
+        console.log(msg);
         if (msg) {
             res.render('games/lobby', { challengeInfo: msg, user: user });
         } else {
