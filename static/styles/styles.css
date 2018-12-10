@@ -35,9 +35,9 @@ header {
     clear: both;
 }
 
-table#board {
+table.board {
     border-collapse: collapse;
-} table td {
+} table td.board-tile {
     border: 5px solid black; 
 } table tr:first-child td {
     border-top: 0;
