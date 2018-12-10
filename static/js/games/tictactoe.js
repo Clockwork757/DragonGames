@@ -6,4 +6,9 @@ function sendMove(x, y) {
     })
 }
 
+$(".board-tile").on(() => {
+    console.log("clicked")
+    console.log($this.data('x'))
+})
+
 socket.emit('join')

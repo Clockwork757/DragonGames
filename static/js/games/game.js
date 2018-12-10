@@ -16,9 +16,8 @@ socket.on('debug', (msg) => {
 })
 
 socket.on('state', (state) => {
-    console.log("got state from server: " + state);
+    console.log("got state from server: ");
     console.log(state)
     setBoard(state['boardState']);
     console.log(state['gameState']);
-    //if(state['gameState'])
 })

@@ -27,10 +27,11 @@ block content
             tr
                 td Opponent
                 td Game
+                td
             each val in challengeInfo
                 tr
                     td
                         a(href=`/view/user/${val['opponent']}`)= val['opponent']
                     td= val['gtype']
                     td
-                        input(value='Accept', type='button', onclick=`goTo(/games/${}${})`)
+                        input(value='Accept', type='button', onclick=`goTo('/games/${val['opponent']}-${val['gtype']}')`)

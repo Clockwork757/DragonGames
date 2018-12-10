@@ -2,7 +2,7 @@ mixin login(user={loggedIn: false})
     if !user.loggedIn
         input(type='button', value='Login', onclick="goTo('/view/login')", class='l-button', id='login-button')
     else
-        p(id='login-button') Logged In as #{user.username}
+        p(id='login-button') Logged in as #{user.username}
             br
             a(href='/logout') Log out
 
@@ -11,7 +11,7 @@ html
         title DragonGames
         block scripts
             script(src="/socket.io/socket.io.js")
-            script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js")
+            script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
             //script(src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js")
             script(src="/js/index.js")
         block styles

@@ -1,7 +1,8 @@
 import io, { Socket } from 'socket.io';
 import { Game } from './Game'
-import { EventEmitter } from 'events';
 import { DB } from '../Database/DB';
+import { TicTacToe } from './TicTacToe';
+import { Chess } from './Chess';
 
 
 enum Turn {
@@ -42,14 +43,13 @@ export abstract class GameController {
     abstract parseMove(j: any): void
 
     sendState() {
-        console.log('sending game state to client');
         this.io.in(this.room).emit('state', { boardState: this.game.render(), gameState: this.game.checkEnd() });
     }
 }
 
 export class TicTacToeController extends GameController {
-    constructor(game: Game, player1: string, player2: string, io: io.Server) {
-        super(game, player1, player2, io);
+    constructor(player1: string, player2: string, io: io.Server) {
+        super(new TicTacToe(), player1, player2, io);
     }
 
     parseMove(j: any) {
@@ -62,5 +62,14 @@ export class TicTacToeController extends GameController {
         console.log(j);
         this.game.parseMove(j);
         this.sendState();
+    }
+}
+
+export class ChessController extends GameController {
+    constructor(player1: string, player2: string, io: io.Server) {
+        super(new Chess(), player1, player2, io);
+    }
+    parseMove(j: any) {
+
     }
 }

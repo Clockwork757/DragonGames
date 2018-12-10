@@ -1,12 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import io, { Socket } from 'socket.io';
+import io from 'socket.io';
 import session from 'express-session';
 import { DB } from './Database/DB';
 import { hash, compare } from 'bcrypt';
 import { TicTacToe } from './Games/TicTacToe'
 import { TicTacToeController, GameController } from './Games/GameController'
-import { gameGetter } from './Games/GameGetter'
+import { gameControllerFactory } from './Games/GameFactory'
 
 var app = express(),
     http = require('http'),
@@ -26,7 +26,6 @@ app.use(session({
 }));
 
 const root = './static/';
-const dirops = { root: root }
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -36,8 +35,6 @@ app.use(express.static(root));
 
 app.get('/', (req, res) => {
     res.redirect('/view/home');
-    //res.render('home.pug')
-    //res.sendFile('index.html', dirops);
 });
 
 const gen_user = { loggedIn: false }
@@ -173,18 +170,6 @@ app.post('/challenge', (req, res) => {
     DB.challenge(username, opponent, game);
 })
 
-app.get('/games/chess', (req, res) => {
-
-})
-
-app.get('/games/tictactoe', (req, res) => {
-
-})
-
-app.get('/games/rps', (req, res) => {
-
-})
-
 // Store GameControllers in a dictionary to access if coming back to page or reloading
 var games = new Map<string, GameController>();
 
@@ -199,24 +184,26 @@ app.get('/games/:opponent-:game', (req, res) => {
     }
     var username = req.session!.user.username,
         opponent = req.params.opponent,
-        game = gameGetter(req.params.game);
+        game = req.params.game
+    if (!['Chess', 'chess', 'tictactoe', 'TicTacToe'].includes(game)) {
+        res.render('no', { no: `${game} is not a game we support` })
+        return;
+    }
     if (username == opponent) {
         res.render('no', { no: "Don't play with yourself" })
         return;
     }
-    var p1s = `${username}:${opponent}:${game.name}`
-    var p2s = `${opponent}:${username}:${game.name}`
+    var p1s = `${username}:${opponent}:${game}`
+    var p2s = `${opponent}:${username}:${game}`
     var gc: GameController;
     if ((games.get(p1s) == undefined) || (games.get(p2s) == undefined)) {
-        gc = new TicTacToeController(game, username, opponent, socket);
+        gc = gameControllerFactory(game, username, opponent, socket);
         games.set(p1s, gc);
         games.set(p2s, gc);
     } else {
         gc = games.get(p1s)!;
+        games.set(p2s, gc);
     }
-
-    games.set(p1s, gc);
-    games.set(p2s, gc);
 
     res.render('games/tictactoe', { user: user });
 })
@@ -242,7 +229,6 @@ app.get('/whoami', (req, res) => {
         res.send(false)
     }
 })
-
 
 var port = process.env.PORT || 8080;
 
