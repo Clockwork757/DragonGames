@@ -82,7 +82,7 @@ app.post('/signup', (req, res) => {
         if (msg) {
             console.log("logged in: " + username + " id: " + msg + " redirecting to " + lastPage);
             req.session!.user = { username: username, loggedIn: true };
-            res.send({ redir: lastPage, status: 0 });
+            res.send({ redir: '/games/lobby', status: 0 });
         }
         else {
             console.log("Couldn't sign up");
@@ -116,7 +116,7 @@ app.post('/login', (req, res) => {
                 if (correct) {
                     console.log("logged in: " + username + " redirecting to " + lastPage);
                     req.session!.user = { username: username, loggedIn: true, avatar: msg['avatar'] };
-                    res.send({ redir: '/', status: 0, user: req.session!.user });
+                    res.send({ redir: '/games/lobby', status: 0, user: req.session!.user });
                 } else {
                     res.send({ redir: '', status: 2, error: "Incorrect Password" });
                 }

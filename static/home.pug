@@ -2,11 +2,12 @@ extends templates/layout
 
 block content
     if user.loggedIn
-      a(href='/games/lobby') Challenges
-    h2(style='color: #000000;') Then Pick a Game To Play
+      a(href='/games/lobby' style='color: #000000;') Challenge a Player
+    else
+      h2(style='color: #000000;') Please Login to Play a Game
     br
-    a(href='/view/games/tictactoe.pug')
+    a(href='/games/lobby')
       img(src='https://upload.wikimedia.org/wikipedia/commons/3/32/Tic_tac_toe.svg', style='width:210px;height:150px;')
     br
-    a(href='/views/games/chess.pug')
+    a(href='/games/lobby')
       img(src='https://upload.wikimedia.org/wikipedia/commons/6/6f/ChessSet.jpg', style='width:210px;height:150px;')
