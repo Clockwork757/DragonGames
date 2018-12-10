@@ -1,3 +1,10 @@
+export enum EndState {
+    Player1,
+    Player2,
+    Tie,
+    inProgress
+}
+
 export abstract class Game {
 
     name: string;
@@ -8,6 +15,7 @@ export abstract class Game {
 
     abstract render(): string
     abstract parseMove(j: any): void
+    abstract checkEnd(): EndState
 }
 
 export abstract class BoardGame extends Game {

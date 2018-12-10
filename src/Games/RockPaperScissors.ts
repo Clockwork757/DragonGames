@@ -1,4 +1,4 @@
-import { Game } from './Game'
+import { Game, EndState } from './Game'
 
 class RockPaperScissors extends Game {
 
@@ -12,5 +12,11 @@ class RockPaperScissors extends Game {
 
     parseMove(j: any) {
 
+    }
+
+    checkEnd() {
+        var e = EndState.inProgress;
+
+        return e;
     }
 }

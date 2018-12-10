@@ -3,15 +3,20 @@ import { Game } from './Game'
 import { EventEmitter } from 'events';
 import { DB } from '../Database/DB';
 
-export abstract class GameController extends EventEmitter {
+
+enum Turn {
+    Player1, Player2
+}
+
+export abstract class GameController {
     game: Game;
     p1: string;
     p2: string;
+    turn: Turn = Turn.Player1;
     room: string;
     io: io.Server
 
     constructor(game: Game, player1: string, player2: string, io: io.Server) {
-        super();
         this.game = game;
         this.p1 = player1;
         this.p2 = player2;
@@ -38,7 +43,7 @@ export abstract class GameController extends EventEmitter {
 
     sendState() {
         console.log('sending game state to client');
-        this.io.in(this.room).emit('state', this.game.render());
+        this.io.in(this.room).emit('state', { boardState: this.game.render(), gameState: this.game.checkEnd() });
     }
 }
 

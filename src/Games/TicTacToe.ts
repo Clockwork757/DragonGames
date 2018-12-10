@@ -1,4 +1,4 @@
-import { BoardGame, Piece, Nothing } from './Game';
+import { BoardGame, Piece, EndState } from './Game';
 
 export class TicTacToe extends BoardGame {
     constructor() {
@@ -22,6 +22,12 @@ export class TicTacToe extends BoardGame {
 
     render() {
         return this.board.toHTML('TicTacToe');
+    }
+
+    checkEnd(){
+        var e = EndState.inProgress;
+
+        return e;
     }
 }
 

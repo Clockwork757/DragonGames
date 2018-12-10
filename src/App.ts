@@ -214,10 +214,6 @@ app.get('/games/:opponent-:game', (req, res) => {
 
     res.render('games/tictactoe', { user: user });
 })
-/*
-socket.on('connection', (socket: Socket) => {
-    console.log("got con");
-})*/
 
 app.get('/logout', (req, res) => {
     if (req.session!.user) {
