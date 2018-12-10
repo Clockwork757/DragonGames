@@ -171,10 +171,6 @@ app.get('/games/chess', (req, res) => {
 
 })
 
-app.get('/games/checkers', (req, res) => {
-
-})
-
 app.get('/games/tictactoe', (req, res) => {
 
 })
