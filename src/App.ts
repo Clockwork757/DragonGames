@@ -152,11 +152,20 @@ app.get('/view/games/lobby', (req, res) => {
             res.render('games/lobby', { user: user, challengeInfo: {} });
         }
     });
-    DB.getChalllenges(username);
+    DB.getChallenges(username);
 })
 
-app.post('/sendChallenge', (req, res) => {
+app.post('/challenge', (req, res) => {
+    var username = req.session!.user.username,
+        opponent = req.body.opponent,
+        game = req.body.game;
+    DB.once('challenge:' + username + opponent + game, (msg) => {
+        if (msg) {
+            res.redirect('/view/games/lobby');
+        }
+    })
 
+    DB.challenge(username, opponent, game);
 })
 
 app.get('/games/chess', (req, res) => {
