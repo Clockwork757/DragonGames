@@ -113,11 +113,11 @@ class Board {
     }
 
     getTile(x: number, y: number) {
-        return this.tiles[x][y]
+        return this.tiles[y][x]
     }
 
     setTile(p: Piece, x: number, y: number) {
-        this.tiles[x][y].setPiece(p);
+        this.tiles[y][x].setPiece(p);
     }
 }
 
