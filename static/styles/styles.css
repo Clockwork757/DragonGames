@@ -43,7 +43,6 @@ table td.board-tile {
     border: 5px solid black;
 }
 
-
 img.TicTacToe-tile-image {
     width: 195px;
     height: 195px;
@@ -76,10 +75,6 @@ table.TicTacToe tr td:last-child.TicTacToe-tile {
 
 table td.Chess-tile {
     border: 5px solid black;
-}
-
-table.Chess td{
-
 }
 
 table tr:first-child td.Chess-tile {
