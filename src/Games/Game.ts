@@ -104,8 +104,8 @@ class Board {
         for (let i: number = 0; i < n; i++) {
             h += "<tr>"
             for (let j: number = 0; j < n; j++) {
-                var image = `<img data-x=${j} data-y=${i} class="board-tile-image ${game}-tile-image" src="${this.getTile(j, i).piece.image}">`;
-                h += `<td data-x=${j} data-y=${i} class="board-tile ${game}-board-tile">${image}</td>`;
+                var image = `<img data-x=${j} data-y=${i} class="tile-image ${game}-tile-image" src="${this.getTile(j, i).piece.image}">`;
+                h += `<td data-x=${j} data-y=${i} class="tile ${game}-tile">${image}</td>`;
             }
             h += "</tr>\n"
         }

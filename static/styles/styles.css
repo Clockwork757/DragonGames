@@ -39,7 +39,7 @@ table.board {
     border-collapse: collapse;
 }
 
-table td.board-tile {
+table td.tile {
     border: 5px solid black;
 }
 
@@ -53,7 +53,7 @@ img.Chess-tile-image {
     height: 75px;
 }
 
-table td.board-tile {
+table td.Chess-tile {
     border: 5px solid black;
 }
 
@@ -75,20 +75,4 @@ table.TicTacToe tr td:last-child.TicTacToe-tile {
 
 table td.Chess-tile {
     border: 5px solid black;
-}
-
-table tr:first-child td.Chess-tile {
-    border-top: 1px;
-}
-
-table tr td:first-child.Chess-tile {
-    border-left: 1px;
-}
-
-table tr:last-child td.Chess-tile {
-    border-bottom: 1px;
-}
-
-table tr td:last-child.Chess-tile {
-    border-right: 1px;
 }
