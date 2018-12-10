@@ -35,8 +35,9 @@ socket.on('state', (state) => {
 
 socket.emit('join', {gamestring: `${username}:${opponent}:${game}`})
 
+/*
 $(window).bind('beforeunload', function () {
     console.log('closing connection');
     //get('/games')
     $(window).unbind(this);
-});
+});*/
