@@ -7,7 +7,7 @@ CREATE TABLE users (
     email VARCHAR (50),
     experience INT DEFAULT 0
 );
-CREATE TYPE gameType AS ENUM ('chess', 'tictactoe', 'rockpaperscissors');
+CREATE TYPE gameType AS ENUM ('Chess', 'TicTacToe');
 CREATE TABLE playedGames (
     id SERIAL PRIMARY KEY,
     /* Just a game type string, e.g. "Chess" or "Tic Tac Toe" */

@@ -6,7 +6,6 @@ export enum EndState {
 }
 
 export abstract class Game {
-
     name: string;
 
     constructor(name: string) {
@@ -112,8 +111,44 @@ class Board {
         return h + "</table>"
     }
 
+    private row(i: number) {
+        var r = new Array<Tile>();
+        let n: number = this.tiles.length;
+        for (let j: number = 0; j < n; j++) {
+            r.push(this.getTile(j, i))
+        }
+        return r;
+    }
+
+    private col(j: number) {
+        var c = new Array<Tile>();
+        let n: number = this.tiles.length;
+        for (let i: number = 0; i < n; i++) {
+            c.push(this.getTile(j, i))
+        }
+        return c;
+    }
+
+    private diagLR() {
+        var d = new Array<Tile>();
+        let n: number = this.tiles.length;
+        for (let i: number = 0; i < n; i++) {
+            d.push(this.getTile(i, i));
+        }
+        return d;
+    }
+
+    private diagRL() {
+        var d = new Array<Tile>();
+        let n: number = this.tiles.length;
+        for (let i: number = n; i >= 0; i--) {
+            d.push(this.getTile(i - 1, 3 - i));
+        }
+        return d;
+    }
+
     getTile(x: number, y: number) {
-        return this.tiles[x][y]
+        return this.tiles[x][y];
     }
 
     setTile(p: Piece, x: number, y: number) {
