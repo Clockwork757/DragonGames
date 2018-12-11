@@ -38,8 +38,7 @@ socket.on('state', (gameState) => {
         setTurnNotif("It\'s your turn");
     }
     setBoard(state['boardState']);
-    if (state['state'] != 'prog') {
-        console.log(state['gameState'] == '');
+    if (state['gameState'] != 'prog') {
         var winner = -1;
         if (state['gameState'] == 'p1') {
             winner = 0;
