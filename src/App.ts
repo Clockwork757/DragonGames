@@ -227,7 +227,7 @@ app.get('/games/:opponent-:game', (req, res) => {
     } else {
         gc = games.get(p1s)! || games.get(p2s)!;
     }
-    res.render(`games/${game}.pug`, { user: user });
+    res.render(`games/${game}`.toLowerCase(), { user: user });
 })
 
 io.on('connection', (socket: Socket) => {
@@ -235,8 +235,11 @@ io.on('connection', (socket: Socket) => {
     // Routes room joins to to their correct GameController
     socket.on('join', (msg) => {
         console.log(msg['gamestring']);
-        var gs1 = msg['gamestring'].split(',')[0],
-            gs2 = msg['gamestring'].split(',')[1];
+        var username = msg['username'],
+            opponent = msg['opponent'],
+            game = msg['game'];
+        var gs1 = `${username}:${opponent}:${game}`
+        var gs2 = `${opponent}:${username}:${game}`
         gc = games.get(gs1) || games.get(gs2)!;
         socket.join(gc.room, () => {
             gc.sendState();
@@ -244,6 +247,16 @@ io.on('connection', (socket: Socket) => {
                 gc.parseMove(move);
             })
         });
+        socket.on('gameOver', (msg) => {
+            var username = msg['username'],
+                opponent = msg['opponent'],
+                game = msg['game'];
+            var gs1 = `${username}:${opponent}:${game}`
+            var gs2 = `${opponent}:${username}:${game}`
+            games.delete(gs1);
+            games.delete(gs2);
+            DB.finishChallenge(username, opponent, game);
+        })
     })
 });
 

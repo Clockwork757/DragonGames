@@ -111,9 +111,24 @@ class _DB extends EventEmitter {
             } else {
                 self.emit('avatar:' + username + avatar, true);
             }
+        })
+    }
+    finishChallenge(username: string, opponent: string, game: string) {
+        var q = `DELETE FROM challenges where gtype = $3::gametype and ((username = $1::text and opponent = $2::text)
+        or (username = $2::text and opponent = $1::text))`
+        var self = this;
+        con.query(q, [username, opponent, game], (err: Error, res: QueryResult) => {
+            if (err) {
+                console.log(err);
+                self.emit('finishChallenge:' + username + opponent + game, false);
+            } else {
+                self.emit('finishChallenge:' + username + opponent + game, true);
+            }
         }
         );
     }
+
+
 }
 
 export const DB = new _DB();

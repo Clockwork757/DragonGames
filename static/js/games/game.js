@@ -38,8 +38,7 @@ socket.on('state', (gameState) => {
         setTurnNotif("It\'s your turn");
     }
     setBoard(state['boardState']);
-    if (state['state'] != 'prog') {
-        console.log(state['gameState'] == '');
+    if (state['gameState'] != 'prog') {
         var winner = -1;
         if (state['gameState'] == 'p1') {
             winner = 0;
@@ -52,15 +51,23 @@ socket.on('state', (gameState) => {
         console.log(winner);
         if (winner == playerN) {
             setTurnNotif("You won!");
-        } else {
+        } else if (winner >= 0) {
             setTurnNotif("You lost!");
         }
+        socket.emit('gameOver', {
+            username: username,
+            opponent: opponent,
+            game: game,
+        })
+        socket.close();
     }
 })
 
 // Server has a map of gamestrings to gamecontrollers, both 
 socket.emit('join', {
-    gamestring: `${username}:${opponent}:${game},${opponent}:${username}:${game}`
+    username: username,
+    opponent: opponent,
+    game: game,
 }, (err) => {
     console.log(err)
 })
