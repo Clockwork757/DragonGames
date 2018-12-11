@@ -213,8 +213,11 @@ io.on('connection', (socket: Socket) => {
     // Routes room joins to to their correct GameController
     socket.on('join', (msg) => {
         console.log(msg['gamestring']);
-        var gs1 = msg['gamestring'].split(',')[0],
-            gs2 = msg['gamestring'].split(',')[1];
+        var username = msg['username'],
+            opponent = msg['opponent'],
+            game = msg['game'];
+        var gs1 = `${username}:${opponent}:${game}`
+        var gs2 = `${opponent}:${username}:${game}`
         gc = games.get(gs1) || games.get(gs2)!;
         socket.join(gc.room, () => {
             gc.sendState();

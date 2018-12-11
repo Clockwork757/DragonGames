@@ -51,7 +51,7 @@ socket.on('state', (gameState) => {
         console.log(winner);
         if (winner == playerN) {
             setTurnNotif("You won!");
-        } else {
+        } else if (winner >= 0) {
             setTurnNotif("You lost!");
         }
         socket.emit('gameOver', {
@@ -65,7 +65,9 @@ socket.on('state', (gameState) => {
 
 // Server has a map of gamestrings to gamecontrollers, both 
 socket.emit('join', {
-    gamestring: `${username}:${opponent}:${game},${opponent}:${username}:${game}`
+    username: username,
+    opponent: opponent,
+    game: game,
 }, (err) => {
     console.log(err)
 })
