@@ -205,7 +205,7 @@ app.get('/games/:opponent-:game', (req, res) => {
     } else {
         gc = games.get(p1s)! || games.get(p2s)!;
     }
-    res.render(`games/${game}.pug`, { user: user });
+    res.render(`games/${game}`.toLowerCase(), { user: user });
 })
 
 io.on('connection', (socket: Socket) => {
