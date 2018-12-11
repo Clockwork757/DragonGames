@@ -1,6 +1,5 @@
 import io, { Socket } from 'socket.io';
 import { Game, EndState } from './Game'
-import { DB } from '../Database/DB';
 import { TicTacToe } from './TicTacToe';
 import { Chess } from './Chess';
 
@@ -51,7 +50,8 @@ export class TicTacToeController extends GameController {
     }
 
     parseMove(j: any) {
-        if (j['player'] != this.currentPlayer && this.game.state != EndState.inProgress) {
+        if (j['player'] != this.currentPlayer || this.game.state != EndState.inProgress) {
+            //console.log(this.game.state);
             return;
         }
         if (j['player'] == this.players[0]) {

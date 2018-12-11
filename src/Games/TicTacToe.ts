@@ -1,4 +1,4 @@
-import { BoardGame, Piece, EndState } from './Game';
+import { BoardGame, Piece, EndState, Nothing, Tile } from './Game';
 
 export class TicTacToe extends BoardGame {
     constructor() {
@@ -6,7 +6,6 @@ export class TicTacToe extends BoardGame {
     }
 
     placeX(x: number, y: number) {
-        console.log(`X: ${x},${y}: ${this.getTile(x, y)}, ${this.getTile(x, y).isEmpty}`)
         if (this.getTile(x, y).isEmpty) {
             this.place(X, x, y)
             return true;
@@ -15,7 +14,6 @@ export class TicTacToe extends BoardGame {
     }
 
     placeO(x: number, y: number) {
-        console.log(`O: ${x},${y}: ${this.getTile(x, y)}, ${this.getTile(x, y).isEmpty}`)
         if (this.getTile(x, y).isEmpty) {
             this.place(O, x, y)
             return true;
@@ -37,9 +35,44 @@ export class TicTacToe extends BoardGame {
 
     get state() {
         var e = EndState.inProgress;
-
+        let wtile: Tile = new Tile(Nothing);
+        var victory = false;
+        var allIterations = this.board.allIterations(),
+            n = allIterations.length;
+        for (var i = 0; i < n; i++) {
+            var trio = allIterations[i];
+            if (trio.every((tile) => {
+                return tile.piece.type == 'X'
+            })) {
+                wtile = trio[0];
+                victory = true;
+                e = EndState.Player1
+                break;
+            }
+            if (trio.every((tile) => {
+                return tile.piece.type == 'O'
+            })) {
+                wtile = trio[0];
+                victory = true;
+                e = EndState.Player2
+                break;
+            }
+            if (victory) {
+                console.log("Someone won");
+                console.log(e);
+                if (wtile.piece.type == 'X') {
+                    console.log('X won');
+                } else {
+                    console.log('O won');
+                }
+                break;
+            }
+            if (this.board.full) {
+                e = EndState.Tie;
+            }
+        }
         return e;
-    }
+    };
 }
 
 class _X extends Piece {

@@ -141,10 +141,22 @@ class Board {
     private diagRL() {
         var d = new Array<Tile>();
         let n: number = this.tiles.length;
-        for (let i: number = n; i >= 0; i--) {
+        for (let i: number = n; i > 0; i--) {
             d.push(this.getTile(i - 1, 3 - i));
         }
         return d;
+    }
+
+    public allIterations() {
+        var a = new Array<Array<Tile>>();
+        let n: number = this.tiles.length;
+        for (var k = 0; k < n; k++) {
+            a.push(this.col(k));
+            a.push(this.row(k));
+        }
+        a.push(this.diagLR());
+        a.push(this.diagRL());
+        return a;
     }
 
     getTile(x: number, y: number) {
@@ -154,9 +166,25 @@ class Board {
     setTile(p: Piece, x: number, y: number) {
         this.tiles[x][y].setPiece(p);
     }
+
+    get full() {
+        var f = true;
+        this.tiles.forEach(e => {
+            e.forEach(e => {
+                if (e.isEmpty) {
+                    f = false;
+                    return;
+                }
+            })
+            if (!f) {
+                return;
+            }
+        })
+        return f;
+    }
 }
 
-class Tile {
+export class Tile {
     piece: Piece;
     constructor(p?: Piece) {
         this.piece = p || Nothing;

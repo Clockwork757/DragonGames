@@ -12,11 +12,11 @@ function setBoard(s) {
     $('#board').html(s);
 }
 
-function setTurnNotif(s){
+function setTurnNotif(s) {
     $('.turn-notif').html(`\t${s}\t`);
 }
 
-function setVersus(s){
+function setVersus(s) {
     $('#versus').html(s);
 }
 
@@ -24,20 +24,38 @@ socket.on('debug', (msg) => {
     console.log(msg);
 })
 
-first = true;
+var first = true;
 
 socket.on('state', (gameState) => {
     state = gameState;
     setTurnNotif('');
     if (first) {
         setVersus(`Versus ${opponent}`);
-        playerN = gameState['players'].indexOf(username);
+        playerN = state['players'].indexOf(username);
         first = false;
     }
-    if (playerN == gameState['turn']){
+    if (playerN == state['turn']) {
         setTurnNotif("It\'s your turn");
     }
-    setBoard(gameState['boardState']);
+    setBoard(state['boardState']);
+    if (state['state'] != 'prog') {
+        console.log(state['gameState'] == '');
+        var winner = -1;
+        if (state['gameState'] == 'p1') {
+            winner = 0;
+        } else if (state['gameState'] == 'p2') {
+            winner = 1
+        } else if (state['gameState'] == 'tie') {
+            console.log('tie');
+            setTurnNotif('Tie!');
+        }
+        console.log(winner);
+        if (winner == playerN) {
+            setTurnNotif("You won!");
+        } else {
+            setTurnNotif("You lost!");
+        }
+    }
 })
 
 // Server has a map of gamestrings to gamecontrollers, both 
@@ -46,9 +64,3 @@ socket.emit('join', {
 }, (err) => {
     console.log(err)
 })
-
-/*
-$(window).on('beforeunload', () => {
-    localStorage.removeItem("opponent");
-    localStorage.removeItem("game");
-});*/
