@@ -101,7 +101,19 @@ class _DB extends EventEmitter {
         );
     }
 
-
+    avatar(username: string, avatar: string) {
+        var q = `UPDATE users SET avatar = ${avatar} WHERE username = ${username}`
+        var self = this;
+        con.query(q, [username, avatar], (err: Error, res: QueryResult) => {
+            if (err) {
+                console.log(err);
+                self.emit('avatar:' + username + avatar, false);
+            } else {
+                self.emit('avatar:' + username + avatar, true);
+            }
+        }
+        );
+    }
 }
 
 export const DB = new _DB();

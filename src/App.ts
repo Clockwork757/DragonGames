@@ -56,10 +56,11 @@ app.get('/view/user/:username', (req, res) => {
     if (req.session!.user) {
         user = req.session!.user;
     } else {
-        user = gen_user;
+        res.redirect('/');
+        return;
     }
     var username = req.params.username;
-    var avatar = 'default.jpg';
+    var avatar = req.session!.user.avatar;
     DB.once('userInfo:' + username, (msg) => {
         if (msg) {
             avatar = msg['avatar'];
@@ -68,6 +69,27 @@ app.get('/view/user/:username', (req, res) => {
         res.render('profile', { username: username, avatar: avatar, user: user });
     })
     DB.getUserInfo(username);
+})
+
+app.get('/view/user-edit/avatar', (req, res) => {
+    console.log("in avatar");
+    var user: any;
+    if (req.session!.user) {
+        user = req.session!.user;
+    } else {
+        user = gen_user;
+    }
+    res.render('avatar', { user: user })
+})
+
+app.post('/view/user-change/avatar', (req, res) => {
+    var user: any;
+    if (req.session!.user) {
+        user = req.session!.user;
+    } else {
+        user = gen_user;
+    }
+
 })
 
 app.post('/signup', (req, res) => {

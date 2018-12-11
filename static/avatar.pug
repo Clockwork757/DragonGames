@@ -1,0 +1,17 @@
+extends templates/layout
+
+
+block content
+    center.container
+        h2(style='color: #000000;') Please Pick Avatar
+        form
+            a(href='/view/user-change/avatar')
+            img(src='/avatars/default.jpg', style='width:210px;height:210px;', id='default')
+            a(href='/view/user-change/avatar')
+            img(src='/avatars/dragon.png', style='width:210px;height:210px;', id='dragon')
+            br
+            a(href='/view/user-change/avatar')
+            img(src='/avatars/dude.png', style='width:210px;height:210px;', id='dude')
+            a(href='/view/user-change/avatar')
+            img(src='/avatars/lady_dude.png', style='width:210px;height:210px;', id='lady_dude')
+        br
