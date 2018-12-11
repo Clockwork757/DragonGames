@@ -222,6 +222,16 @@ io.on('connection', (socket: Socket) => {
                 gc.parseMove(move);
             })
         });
+        socket.on('gameOver', (msg) => {
+            var username = msg['username'],
+                opponent = msg['opponent'],
+                game = msg['game'];
+            var gs1 = `${username}:${opponent}:${game}`
+            var gs2 = `${opponent}:${username}:${game}`
+            games.delete(gs1);
+            games.delete(gs2);
+            DB.finishChallenge(username, opponent, game);
+        })
     })
 });
 

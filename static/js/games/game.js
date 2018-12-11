@@ -54,6 +54,12 @@ socket.on('state', (gameState) => {
         } else {
             setTurnNotif("You lost!");
         }
+        socket.emit('gameOver', {
+            username: username,
+            opponent: opponent,
+            game: game,
+        })
+        socket.close();
     }
 })
 
