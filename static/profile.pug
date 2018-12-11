@@ -5,7 +5,7 @@ block append scripts
 
 block content
   p= username
-  img.image(src='/avatars/' + avatar)
+  img.avatar(src='/avatars/' + avatar)
   br
   if username == user.username
-    input(type='button', value='Edit', onclick="goTo('/view/user-edit/avatar')", class='edit-button', id='edit-button')
+    input(type='button', value='Edit', onclick="goTo('/user-edit/')", class='edit-button', id='edit-button')

@@ -7,7 +7,7 @@ function login() {
         password: password
     }, handleLogin)
 }
-
+    
 function handleLogin(msg) {
     msg = JSON.parse(msg);
     if (msg['status'] == 0) {

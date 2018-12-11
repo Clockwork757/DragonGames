@@ -14,6 +14,7 @@ function signup() {
 }
 
 function handleSignup(msg) {
+    msg = JSON.parse(msg);
     if (msg['status'] == 0) {
         goTo(msg['redir']);
     } else {

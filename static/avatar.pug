@@ -1,17 +1,14 @@
 extends templates/layout
 
+block append scripts
+    script(src="/js/avatar.js")
 
 block content
     center.container
-        h2(style='color: #000000;') Please Pick Avatar
-        form
-            a(href='/view/user-change/avatar')
-            img(src='/avatars/default.jpg', style='width:210px;height:210px;', id='default')
-            a(href='/view/user-change/avatar')
-            img(src='/avatars/dragon.png', style='width:210px;height:210px;', id='dragon')
-            br
-            a(href='/view/user-change/avatar')
-            img(src='/avatars/dude.png', style='width:210px;height:210px;', id='dude')
-            a(href='/view/user-change/avatar')
-            img(src='/avatars/lady_dude.png', style='width:210px;height:210px;', id='lady_dude')
+        h2 Please pick an avatar:
+        img.avatar#default(src='/avatars/default.jpg', data-img='default.jpg')
+        img.avatar#dragon(src='/avatars/dragon.png', data-img='dragon.png')
+        br
+        img.avatar#dude(src='/avatars/dude.png', data-img='dude.png')
+        img.avatar#lady_dude(src='/avatars/lady_dude.png', data-img='lady_dude.png')
         br
