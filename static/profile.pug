@@ -1,6 +1,9 @@
 extends templates/layout
 
+block append scripts
+    script(src="/js/profile.js")
 
 block content
   p= username
   img.image(src='/avatars/' + avatar)
+  input(type='button', value='Edit', onclick='edit()', class='edit-button', id='edit-button')

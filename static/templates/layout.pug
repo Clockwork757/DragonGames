@@ -2,13 +2,16 @@ mixin login(user={loggedIn: false})
     if !user.loggedIn
         input(type='button', value='Login', onclick="goTo('/view/login')", class='l-button', id='login-button')
     else
-        p(id='login-button') Logged in as #{user.username}
+        p(id='login-button') Logged in as 
+            a(href=`/view/user/${user.username}`) #{user.username}
             br
             a(href='/logout') Log out
+            br
 
 html
     block head
         title DragonGames
+        input(type='button', value='Home', onclick="goTo('/')", class='h-button', id='home-button')
         block libs
             script(src="/socket.io/socket.io.js")
             script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
