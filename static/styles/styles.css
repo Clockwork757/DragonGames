@@ -77,11 +77,17 @@ table td.Chess-tile {
     border: 5px solid black;
 }
 
-h2.turn-notif{
+h2.turn-notif {
     color: crimson;
     display: inline;
 }
 
-h3#versus{
+h3#versus {
     display: inline;
+}
+
+.avatar {
+    padding: 5px;
+    width: 210px;
+    height: 210px;
 }

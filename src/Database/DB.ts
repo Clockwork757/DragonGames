@@ -101,18 +101,19 @@ class _DB extends EventEmitter {
         );
     }
 
-    avatar(username: string, avatar: string) {
-        var q = `UPDATE users SET avatar = ${avatar} WHERE username = ${username}`
+    setAvatar(username: string, avatar: string) {
+        var q = `UPDATE users SET avatar = $2::text WHERE username = $1::text`
         var self = this;
         con.query(q, [username, avatar], (err: Error, res: QueryResult) => {
             if (err) {
                 console.log(err);
-                self.emit('avatar:' + username + avatar, false);
+                self.emit('setAvatar:' + username + avatar, false);
             } else {
-                self.emit('avatar:' + username + avatar, true);
+                self.emit('setAvatar:' + username + avatar, true);
             }
         })
     }
+
     finishChallenge(username: string, opponent: string, game: string) {
         var q = `DELETE FROM challenges where gtype = $3::gametype and ((username = $1::text and opponent = $2::text)
         or (username = $2::text and opponent = $1::text))`

@@ -6,6 +6,7 @@ import { DB } from './Database/DB';
 import { hash, compare } from 'bcrypt';
 import { GameController } from './Games/GameController'
 import { gameControllerFactory } from './Games/GameFactory'
+import { returnStatement } from 'babel-types';
 
 var app = express(),
     http = require('http'),
@@ -71,25 +72,38 @@ app.get('/view/user/:username', (req, res) => {
     DB.getUserInfo(username);
 })
 
-app.get('/view/user-edit/avatar', (req, res) => {
-    console.log("in avatar");
+app.get('/user-edit/', (req, res) => {
     var user: any;
     if (req.session!.user) {
         user = req.session!.user;
     } else {
-        user = gen_user;
+        res.redirect('/');
+        return;
     }
     res.render('avatar', { user: user })
 })
 
-app.post('/view/user-change/avatar', (req, res) => {
+app.post('/user-edit/avatar', (req, res) => {
     var user: any;
-    if (req.session!.user) {
-        user = req.session!.user;
+    if (!req.session!.user) {
+        res.redirect('/login');
     } else {
-        user = gen_user;
+        user = req.session!.user;
     }
-
+    var avatar = req.body.avatar,
+        username = req.body.username;
+    if (user.username != username) {
+        res.render('no', { no: "Don't change other people's avatars" })
+    }
+    DB.once('setAvatar:' + username + avatar, (msg) => {
+        if (msg) {
+            console.log(`Changed ${username}'s avatar to: ${avatar}`)
+            res.send({ redir: `/view/user/${username}`, status: 0 });
+        } else {
+            res.send({ redir: '', status: 2, error: 'Unable to change avatar' })
+        }
+    });
+    DB.setAvatar(username, avatar);
 })
 
 app.post('/signup', (req, res) => {
